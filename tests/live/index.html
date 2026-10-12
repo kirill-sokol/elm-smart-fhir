@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elm SMART live test</title>
+<style>
+  body { font: 16px system-ui, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; }
+  button, input { font: inherit; padding: 8px; margin: 4px; }
+  label { display: inline-block; }
+  pre { padding: 12px; background: #f3f4f6; overflow: auto; }
+  li { list-style: none; }
+  ul { padding: 0; }
+</style>
+<div id="app"></div>
+<script src="/elm.js"></script>
+<script type="module">
+  import { wireSmartAuth } from "/auth-bridge.mjs";
+  const params = new URL(location.href).searchParams;
+  const canConnect = params.has("launch") || params.has("code") || params.has("state") || params.has("error") || Boolean(sessionStorage.getItem("smart-session"));
+  const app = Elm.LiveTest.init({
+    node: document.getElementById("app"),
+    flags: { redirectUri: location.origin + "/", canConnect }
+  });
+  wireSmartAuth(app.ports);
+  // Trigger init after ports are connected, including after callback/reload.
+  if (canConnect) {
+    app.ports.start.send(null);
+  }
+</script>
+</html>

@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "scripts": {
+    "test": "npm run test:elm && npm run test:bridge",
+    "test:elm": "elm-test",
+    "build:live": "elm make tests/LiveTest.elm --output=elm-stuff/live.js",
+    "live": "npm run build:live && node tests/live/server.mjs",
+    "test:bridge": "elm make tests/AuthBridgeHarness.elm --output=elm-stuff/auth-bridge-harness.js && node --test tests/auth-bridge.test.mjs"
+  },
+  "devDependencies": {
+    "elm": "0.19.1-6",
+    "elm-test": "0.19.1-revision17"
+  }
+}
